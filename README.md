@@ -11,7 +11,7 @@ Show what was **searched in this conversation**, what comes from **memory**, and
 
 ### Demo
 
-https://github.com/liqk2116-creator/AI-Truth/blob/main/docs/demo.mp4
+https://github.com/user-attachments/assets/f06293c7-12ce-4cde-b0c4-b5b708c0c122
 
 ---
 
