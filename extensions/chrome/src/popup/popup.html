@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>AI Credibility Visualizer</h1>
+
+    <div class="toggle-row">
+      <span>Enable highlighting</span>
+      <label class="switch">
+        <input type="checkbox" id="toggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <span>Mode</span>
+      <button class="mode-btn" id="mode-btn">Audit</button>
+    </div>
+
+    <div class="legend">
+      <span class="leg-green">Verified</span>
+      <span class="leg-orange">Caution</span>
+      <span class="leg-gray">Reference</span>
+      <span class="leg-red">Alert</span>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2>Prompt</h2>
+
+    <div class="toggle-row">
+      <span>Version</span>
+      <select id="version-select"></select>
+    </div>
+
+    <button class="copy-btn" id="copy-btn">Copy Prompt</button>
+    <span class="copy-feedback" id="copy-feedback"></span>
+
+    <div class="section-divider"></div>
+
+    <div class="toggle-row">
+      <span>Auto-inject on new chat</span>
+      <label class="switch">
+        <input type="checkbox" id="autofill-toggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <p class="hint">Works on Claude, ChatGPT, and Gemini</p>
+  </div>
+
+  <script src="../data/prompts.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

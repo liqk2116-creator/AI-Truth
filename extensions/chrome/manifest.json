@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "AI Credibility Visualizer",
+  "version": "1.1.0",
+  "description": "Color-codes AI responses by evidence strength. Copy or auto-fill credibility prompts. Works on Claude, ChatGPT, and Gemini.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://gemini.google.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.js"
+  },
+  "content_scripts": [{
+    "matches": [
+      "https://claude.ai/*",
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*",
+      "https://gemini.google.com/*"
+    ],
+    "js": [
+      "src/data/prompts.js",
+      "src/utils/labelParser.js",
+      "src/utils/colorMapper.js",
+      "src/content/autofill.js",
+      "src/content/index.js"
+    ],
+    "css": ["src/styles/inject.css"],
+    "run_at": "document_idle"
+  }],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "public/icons/icon16.png",
+      "48": "public/icons/icon48.png",
+      "128": "public/icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "public/icons/icon16.png",
+    "48": "public/icons/icon48.png",
+    "128": "public/icons/icon128.png"
+  }
+}

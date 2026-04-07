@@ -1,0 +1,171 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  width: 280px;
+  background: #fff;
+}
+
+.container {
+  padding: 16px;
+}
+
+h1 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 14px;
+}
+
+h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #d1d5db;
+  border-radius: 22px;
+  transition: 0.2s;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+  background: #3b82f6;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* Mode button */
+.mode-btn {
+  background: #374151;
+  color: #F9FAFB;
+  border: none;
+  padding: 4px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.mode-btn:hover {
+  background: #4B5563;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+.legend span::before {
+  content: '\25A0';
+  margin-right: 2px;
+}
+.leg-green::before { color: #10B981 !important; }
+.leg-orange::before { color: #F97316 !important; }
+.leg-gray::before { color: #D1D5DB !important; }
+.leg-red::before { color: #EF4444 !important; }
+
+/* Section divider */
+.section-divider {
+  border-top: 1px solid #E5E7EB;
+  margin: 12px 0;
+}
+
+/* Version select */
+select {
+  background: #F9FAFB;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: #374151;
+  cursor: pointer;
+}
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* Copy button */
+.copy-btn {
+  width: 100%;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: background 0.15s;
+}
+.copy-btn:hover {
+  background: #2563eb;
+}
+.copy-btn:active {
+  background: #1d4ed8;
+}
+
+/* Copy feedback */
+.copy-feedback {
+  display: block;
+  font-size: 11px;
+  color: #10B981;
+  font-weight: 600;
+  text-align: center;
+  height: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hint {
+  font-size: 11px;
+  color: #9ca3af;
+}

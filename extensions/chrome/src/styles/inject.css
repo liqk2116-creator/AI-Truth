@@ -1,0 +1,400 @@
+/* Credibility Visualizer - injected styles */
+
+/* === Audit mode: four-level color backgrounds === */
+.cred-green {
+  background-color: #D1FAE5 !important;
+  border-left: 4px solid #10B981 !important;
+  padding-left: 12px !important;
+  border-radius: 4px !important;
+}
+.cred-orange {
+  background-color: #FFF7ED !important;
+  border-left: 4px solid #F97316 !important;
+  padding-left: 12px !important;
+  border-radius: 4px !important;
+}
+.cred-gray {
+  background-color: #F3F4F6 !important;
+  border-left: 4px solid #D1D5DB !important;
+  padding-left: 12px !important;
+  border-radius: 4px !important;
+}
+.cred-red {
+  background-color: #FEE2E2 !important;
+  border-left: 4px solid #EF4444 !important;
+  padding-left: 12px !important;
+  border-radius: 4px !important;
+}
+
+/* === Risk icon (⚠) — TEMPORARILY DISABLED ===
+.cred-risk { ... }
+.cred-risk::before { ... }
+*/
+
+/* === Fragile underline (F tag) === */
+.cred-fragile {
+  text-decoration: underline !important;
+  text-decoration-style: dotted !important;
+  text-decoration-color: #EF4444 !important;
+  text-underline-offset: 4px !important;
+}
+
+/* === Hidden label (stores original text for toggle restore) === */
+.cred-label-hidden { display: none !important; }
+
+/* === Label pill (Audit mode — color matches paragraph) === */
+.cred-label-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 6px;
+  cursor: help;
+  vertical-align: middle;
+  line-height: 1.4;
+  transition: filter 0.15s;
+}
+.cred-label-pill:hover {
+  filter: brightness(0.92);
+}
+/* Pill colors match parent paragraph */
+.cred-green .cred-label-pill {
+  background: rgba(16, 185, 129, 0.18);
+  color: #065F46;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.cred-orange .cred-label-pill {
+  background: rgba(249, 115, 22, 0.15);
+  color: #9A3412;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+.cred-gray .cred-label-pill {
+  background: rgba(107, 114, 128, 0.12);
+  color: #374151;
+  border: 1px solid rgba(107, 114, 128, 0.2);
+}
+.cred-red .cred-label-pill {
+  background: rgba(239, 68, 68, 0.15);
+  color: #991B1B;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* === Hover card (Audit mode) === */
+.cred-hover-card {
+  position: fixed;
+  background: #1F2937;
+  color: #F9FAFB;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  width: max-content;
+  min-width: 280px;
+  max-width: 460px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 10000;
+  pointer-events: none;
+  white-space: normal;
+  word-break: break-word;
+}
+.cred-hover-card .tag-name {
+  font-weight: 700;
+  color: #FCD34D;
+  margin-bottom: 4px;
+}
+.cred-hover-card .tag-row {
+  margin-bottom: 6px;
+}
+.cred-hover-card .tag-row:last-child {
+  margin-bottom: 0;
+}
+.cred-hover-card .tag-role {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+.cred-hover-card .tag-def {
+  font-size: 12px;
+  color: #D1D5DB;
+}
+
+/* === Fragile tooltip === */
+.cred-fragile-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1F2937;
+  color: #F9FAFB;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10000;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Mode toggle button lives in Shadow DOM — see content/index.js */
+
+/* === Simple mode === */
+
+/* Strip backgrounds/borders, show badge prefix */
+.mode-simple .cred-green,
+.mode-simple .cred-orange,
+.mode-simple .cred-gray,
+.mode-simple .cred-red {
+  background: none !important;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+/* Simple mode badge — no emoji, colored pill with word */
+.mode-simple .cred-green::before {
+  content: 'Verified';
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #065F46;
+  background: #D1FAE5;
+  border: 1px solid #A7F3D0;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+.mode-simple .cred-orange::before {
+  content: 'Caution';
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9A3412;
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+.mode-simple .cred-gray::before {
+  content: 'Ref';
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+.mode-simple .cred-red::before {
+  content: 'Alert';
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #991B1B;
+  background: #FEE2E2;
+  border: 1px solid #FECACA;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+/* Simple mode: hide audit-only elements */
+.mode-simple .cred-label-pill { display: none !important; }
+.mode-simple .cred-fragile { text-decoration: none !important; }
+.mode-simple .cred-hover-card { display: none !important; }
+.mode-simple .cred-fragile-tip { display: none !important; }
+
+/* === Inline instruction selector (all platforms) === */
+.cred-selector-wrapper {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.cred-selector-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-text-300, #b4b4b4);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.cred-selector-trigger:hover {
+  background: var(--bg-bg-200, rgba(255,255,255,0.06));
+  color: var(--text-text-100, #e8e8e8);
+}
+
+.cred-selector-chevron {
+  font-size: 14px;
+  line-height: 1;
+  margin-top: -2px;
+}
+
+/* Dropdown panel */
+.cred-dropdown {
+  z-index: 10100;
+  background: var(--bg-bg-100, #2b2b2b);
+  border: 1px solid var(--border-border-300, #404040);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  overflow: hidden;
+  min-width: 520px;
+  max-width: 640px;
+  animation: cred-dropdown-in 0.15s ease-out;
+}
+@keyframes cred-dropdown-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cred-dropdown-header {
+  padding: 14px 16px 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-text-100, #e8e8e8);
+}
+
+.cred-dropdown-content {
+  display: flex;
+  border-top: 1px solid var(--border-border-300, #363636);
+  min-height: 200px;
+  max-height: 340px;
+}
+
+.cred-dropdown-list {
+  flex: 0 0 50%;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-border-300, #363636);
+  padding: 6px;
+}
+.cred-dropdown-list::-webkit-scrollbar {
+  width: 4px;
+}
+.cred-dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+
+.cred-dropdown-item {
+  padding: 10px 12px;
+  font-size: 0.8125rem;
+  color: var(--text-text-200, #d4d4d4);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.cred-dropdown-item:hover {
+  background: var(--bg-bg-200, rgba(255,255,255,0.08));
+  color: var(--text-text-100, #e8e8e8);
+}
+.cred-dropdown-item.selected {
+  background: var(--accent-main-100, rgba(99,102,241,0.15));
+  color: var(--accent-main-000, #a5b4fc);
+}
+
+.cred-dropdown-preview {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: var(--text-text-300, #999);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.cred-dropdown-preview::-webkit-scrollbar {
+  width: 4px;
+}
+.cred-dropdown-preview::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+}
+
+.cred-dropdown-clear {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-text-300, #999);
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border-border-300, #363636);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.cred-dropdown-clear:hover {
+  background: var(--bg-bg-200, rgba(255,255,255,0.06));
+  color: var(--text-text-100, #e8e8e8);
+}
+
+/* === Light-mode overrides (ChatGPT / Gemini default to light) === */
+@media (prefers-color-scheme: light) {
+  .cred-selector-trigger {
+    color: #6b7280;
+  }
+  .cred-selector-trigger:hover {
+    background: rgba(0,0,0,0.05);
+    color: #1f2937;
+  }
+  .cred-dropdown {
+    background: #fff;
+    border-color: #e5e7eb;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .cred-dropdown-header {
+    color: #1f2937;
+  }
+  .cred-dropdown-content {
+    border-color: #e5e7eb;
+  }
+  .cred-dropdown-list {
+    border-color: #e5e7eb;
+  }
+  .cred-dropdown-list::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.15);
+  }
+  .cred-dropdown-item {
+    color: #374151;
+  }
+  .cred-dropdown-item:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+  }
+  .cred-dropdown-item.selected {
+    background: rgba(99,102,241,0.1);
+    color: #4f46e5;
+  }
+  .cred-dropdown-preview {
+    color: #6b7280;
+  }
+  .cred-dropdown-preview::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.12);
+  }
+  .cred-dropdown-clear {
+    color: #6b7280;
+    border-color: #e5e7eb;
+  }
+  .cred-dropdown-clear:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+  }
+}
