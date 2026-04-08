@@ -114,9 +114,19 @@
     }
   }
 
-  // Persistent polling fallback: SPA navigations can set destroyed=true which
-  // kills the MutationObserver. The button must survive regardless.
-  setInterval(ensureModeBtn, 2000);
+  // Persistent polling: keeps button alive and recovers from destroyed state.
+  // SPA navigations can trigger context invalidation that sets destroyed=true,
+  // but the context may become valid again on the next page.
+  setInterval(() => {
+    ensureModeBtn();
+    if (destroyed && isContextValid()) {
+      destroyed = false;
+      try {
+        observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+      } catch (e) {}
+      scanAll();
+    }
+  }, 2000);
 
   // --- Find paragraphs ---
   function findParagraphs() {
@@ -248,20 +258,31 @@
 
   // --- Process paragraph ---
   function processParagraph(p) {
-    if (p.dataset.credProcessed) return;
-
     const text = p.textContent || '';
     const tags = extractTags(text);
-    if (tags.length === 0) {
-      p.dataset.credProcessed = 'true';
-      return;
+
+    // No labels found — don't mark as processed so we can re-check later
+    // (streaming may add labels after initial render)
+    if (tags.length === 0) return;
+
+    // Already processed and content hasn't changed — skip
+    if (p.dataset.credProcessed && p.dataset.credText === text) return;
+
+    // Content changed since last process — strip old decorations first
+    if (p.dataset.credProcessed) {
+      p.classList.remove('cred-red', 'cred-orange', 'cred-gray', 'cred-green', 'cred-fragile');
+      p.querySelectorAll('.cred-label-pill').forEach(pill => pill.remove());
+      p.querySelectorAll('.cred-label-hidden').forEach(span => {
+        span.replaceWith(document.createTextNode(span.textContent));
+      });
     }
 
     const color = getColorLevel(tags);
 
-    // Store tag data
+    // Store tag data + text snapshot for change detection
     p.dataset.credLabels = JSON.stringify(tags);
     p.dataset.credColor = color;
+    p.dataset.credText = text;
 
     // Apply color class
     p.classList.add('cred-' + color);
@@ -297,9 +318,7 @@
     counts.red = 0; counts.orange = 0; counts.gray = 0; counts.green = 0;
 
     findParagraphs().forEach((p) => {
-      if (!p.dataset.credProcessed) {
-        processParagraph(p);
-      }
+      processParagraph(p);
       const c = p.dataset.credColor;
       if (c === 'red') counts.red++;
       else if (c === 'orange') counts.orange++;
@@ -323,6 +342,7 @@
       delete el.dataset.credProcessed;
       delete el.dataset.credColor;
       delete el.dataset.credLabels;
+      delete el.dataset.credText;
     });
     counts.red = 0; counts.orange = 0; counts.gray = 0; counts.green = 0;
     updateBadge();
