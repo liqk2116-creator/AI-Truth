@@ -220,12 +220,13 @@
         pill.dataset.tags = JSON.stringify(labelTags);
 
         // Attach hover card to pill
-        let card = null;
         pill.addEventListener('mouseenter', () => {
           if (mode !== 'audit') return;
           const tags = JSON.parse(pill.dataset.tags || '[]');
           if (tags.length === 0) return;
-          card = createHoverCard(tags);
+          // Remove any existing hover cards first
+          document.querySelectorAll('.cred-hover-card').forEach(c => c.remove());
+          const card = createHoverCard(tags);
           document.body.appendChild(card);
           const rect = pill.getBoundingClientRect();
           let top = rect.top - card.offsetHeight - 6;
@@ -237,8 +238,7 @@
           card.style.left = left + 'px';
         });
         pill.addEventListener('mouseleave', () => {
-          if (card && card.parentNode) card.parentNode.removeChild(card);
-          card = null;
+          document.querySelectorAll('.cred-hover-card').forEach(c => c.remove());
         });
 
         // Store original label text in a hidden span so removeAll() can restore it
@@ -275,6 +275,8 @@
       p.querySelectorAll('.cred-label-hidden').forEach(span => {
         span.replaceWith(document.createTextNode(span.textContent));
       });
+      // Clean up any orphaned hover cards
+      document.querySelectorAll('.cred-hover-card').forEach(c => c.remove());
     }
 
     const color = getColorLevel(tags);
