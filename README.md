@@ -6,7 +6,7 @@ Evidence labels for Claude, ChatGPT, and Gemini.
 Show what was **searched in this conversation**, what comes from **memory**, and what is **inference** — instead of presenting everything in the same confident tone.
 
 <p align="center">
-  <img src="docs/ai_truth_homepage_mockup.png?v=2" alt="AI Truth — evidence labels for AI responses" width="720">
+  <img src="https://raw.githubusercontent.com/Kunkun2116/AI-Truth/main/docs/ai_truth_homepage_mockup.png" alt="AI Truth — evidence labels for AI responses" width="720">
 </p>
 
 ### Demo
