@@ -3,8 +3,8 @@
 chrome.runtime.onMessage.addListener((message, sender) => {
   if (message.type !== 'updateBadge' || !sender.tab?.id) return;
 
-  const { red, orange, green } = message.counts;
-  const total = red + orange + (message.counts.gray || 0) + green;
+  const { red, orange, gray, green } = message.counts;
+  const total = red + orange + (gray || 0) + green;
 
   if (red > 0) {
     chrome.action.setBadgeText({ text: String(red), tabId: sender.tab.id });

@@ -56,6 +56,12 @@ copyBtn.addEventListener('click', () => {
     setTimeout(() => {
       copyFeedback.style.opacity = '0';
     }, 2000);
+  }).catch(() => {
+    copyFeedback.textContent = 'Copy failed';
+    copyFeedback.style.opacity = '1';
+    setTimeout(() => {
+      copyFeedback.style.opacity = '0';
+    }, 2000);
   });
 });
 

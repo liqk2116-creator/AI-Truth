@@ -452,20 +452,24 @@
       if (destroyed) { clearInterval(urlCheckInterval); return; }
       if (location.href !== lastUrl) {
         lastUrl = location.href;
+        autoInjected = false;
         cleanup();
         init();
       }
     }, 1000);
   }
 
+  let domObserver = null;
+
   function startDomWatcher() {
-    const obs = new MutationObserver(() => {
-      if (destroyed) { obs.disconnect(); return; }
+    if (domObserver) domObserver.disconnect();
+    domObserver = new MutationObserver(() => {
+      if (destroyed) { domObserver.disconnect(); return; }
       if (!document.getElementById(SELECTOR_ID)) {
         tryInjectSelector();
       }
     });
-    obs.observe(document.body, { childList: true, subtree: true });
+    domObserver.observe(document.body, { childList: true, subtree: true });
   }
 
   // Listen for storage changes from popup

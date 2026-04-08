@@ -143,6 +143,8 @@ It changes **what becomes visible to the user**.
 ## 🗂️ Project structure
 
 ```text
+├── docs/                        # Design docs and assets
+│   └── design-journey.md
 ├── extensions/
 │   └── chrome/                  # Chrome extension for visualizing labels
 │       ├── manifest.json

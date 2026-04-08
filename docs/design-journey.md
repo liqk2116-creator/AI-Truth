@@ -182,7 +182,8 @@ But the counter-argument won: leaving trusted content uncolored means the user c
 
 The final system:
 - 🟢 Green (verified): S1, S2, M1, R1
-- 🟠 Orange (caution): R2, S3, M2, U, C
+- 🟠 Orange (caution): R2, S3, M2
+- ⚪ Gray (reference): U, C
 - 🔴 Red (alert): M3, F, R3
 
 Priority: red > orange > green. If a paragraph has tags triggering multiple levels, the highest-risk color wins.

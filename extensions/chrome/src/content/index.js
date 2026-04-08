@@ -25,19 +25,9 @@
     F:  { role: 'Uncertainty flag', def: 'Insufficient evidence or conflicting information' },
   };
 
-  // --- Risk domain detection ---
-  const RISK_PATTERN = /\u26A0\uFE0F?[\s]*(Legal|Finance|Tax|Medical|Safety|Compliance|Engineering|\u6CD5\u5F8B|\u8D22\u52A1|\u7A0E\u52A1|\u533B\u7597|\u5B89\u5168|\u5408\u89C4|\u5DE5\u7A0B)/i;
-
-  function hasRiskMarker(text) {
-    return RISK_PATTERN.test(text);
-  }
-
   function hasFragileTag(tags) {
     return tags.includes('F');
   }
-
-  // --- Label regex ---
-  const LABEL_REGEX_SRC = '\\[([^\\]]*(?:S[1-3]|M[1-3]|R[1-3]|U|C|F)[^\\]]*)\\]';
 
   // --- Context validity (Chrome extension) ---
   function isContextValid() {
@@ -275,12 +265,6 @@
 
     // Apply color class
     p.classList.add('cred-' + color);
-
-    // Risk marker — TEMPORARILY DISABLED
-    // if (hasRiskMarker(text)) {
-    //   p.classList.add('cred-risk');
-    //   p.style.position = p.style.position || 'relative';
-    // }
 
     // Fragile underline
     if (hasFragileTag(tags)) {
