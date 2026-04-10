@@ -219,19 +219,28 @@
     el.appendChild(pill);
   }
 
+  // --- Get text content excluding our own pill elements (read-only, no DOM mutation) ---
+  function getCleanText(el) {
+    const pills = el.querySelectorAll('.cred-label-pill');
+    if (pills.length === 0) return el.textContent || '';
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('.cred-label-pill').forEach(p => p.remove());
+    return clone.textContent || '';
+  }
+
   // --- Process paragraph ---
   function processParagraph(p) {
     // Skip paragraphs inside actively streaming messages
     if (isStreaming(p)) return;
 
-    const text = p.textContent || '';
+    const text = getCleanText(p);
     const tags = extractTags(text);
 
     // No labels found — don't mark as processed so we can re-check later
     // (streaming may add labels after initial render)
     if (tags.length === 0) return;
 
-    // Already processed and content hasn't changed — skip
+    // Already processed and content hasn't changed — skip entirely
     if (p.dataset.credProcessed && p.dataset.credText === text) return;
 
     // Content changed since last process — strip old decorations first
@@ -244,7 +253,7 @@
 
     const color = getColorLevel(tags);
 
-    // Store tag data + text snapshot for change detection
+    // Store tag data + clean text snapshot for change detection
     p.dataset.credLabels = JSON.stringify(tags);
     p.dataset.credColor = color;
     p.dataset.credText = text;
@@ -257,7 +266,7 @@
       p.classList.add('cred-fragile');
     }
 
-    // Replace raw labels with hoverable pills (hover card attached to each pill)
+    // Append summary pill (non-destructive)
     replaceLabelsInElement(p);
 
     p.dataset.credProcessed = 'true';
