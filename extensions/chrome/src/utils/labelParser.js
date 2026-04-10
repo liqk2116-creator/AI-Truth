@@ -1,6 +1,6 @@
 // Label extraction - ported from credibility-visualizer/src/utils/labelParser.ts
 
-const LABEL_REGEX = /\[([^\]]*(?:S[1-3]|M[1-3]|R[1-3]|U|C|F)[^\]]*)\]/g;
+const LABEL_REGEX = /\[([^\]]*\b(?:S[1-3]|M[1-3]|R[1-3]|U|C|F)\b[^\]]*)\]/g;
 
 function parseTagsFromLabel(raw) {
   const cleaned = raw.replace(/[❗⚠️⚠]/g, '').replace(/[\u4e00-\u9fff]+/g, '');

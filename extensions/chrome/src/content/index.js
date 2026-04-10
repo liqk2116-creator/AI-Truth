@@ -185,57 +185,45 @@
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  // --- Replace label text with hoverable pill ---
+  // --- Check if element is inside a streaming message ---
+  function isStreaming(el) {
+    return !!(el.closest('[data-is-streaming="true"]') || el.closest('.result-streaming'));
+  }
+
+  // --- Append a summary pill to element (non-destructive — never replaces text nodes) ---
   function replaceLabelsInElement(el) {
-    // Match [S1], [S1+R2], [⚠Legal M2+R3+F], [S2+F❗] etc.
-    const labelPattern = /\[([^\]]*(?:S[1-3]|M[1-3]|R[1-3]|U|C|F)[^\]]*)\]/g;
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
-    const textNodes = [];
-    let node;
-    while ((node = walker.nextNode())) textNodes.push(node);
+    // Remove any existing pill first
+    el.querySelectorAll('.cred-label-pill').forEach(p => p.remove());
 
-    for (const textNode of textNodes) {
-      const text = textNode.textContent;
-      if (!labelPattern.test(text)) continue;
-      labelPattern.lastIndex = 0;
+    const text = el.textContent || '';
+    const labelPattern = /\[([^\]]*\b(?:S[1-3]|M[1-3]|R[1-3]|U|C|F)\b[^\]]*)\]/g;
 
-      const frag = document.createDocumentFragment();
-      let lastIdx = 0;
-      let match;
-      while ((match = labelPattern.exec(text)) !== null) {
-        if (match.index > lastIdx) {
-          frag.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
-        }
-        // Extract tags from this specific label
-        const labelTags = [];
-        const cleaned = match[1].replace(/[\u26A0\uFE0F\u2757]/g, '').replace(/[\u4e00-\u9fff]+/g, '');
-        const tagRe = /\b(S[1-3]|M[1-3]|R[1-3]|U|C|F)\b/g;
-        let tm;
-        while ((tm = tagRe.exec(cleaned)) !== null) labelTags.push(tm[1]);
-
-        // Create hoverable pill (hover handled by delegated listeners below)
-        const pill = document.createElement('span');
-        pill.className = 'cred-label-pill';
-        pill.textContent = labelTags.join('·');
-        pill.dataset.tags = JSON.stringify(labelTags);
-
-        // Store original label text in a hidden span so removeAll() can restore it
-        const hidden = document.createElement('span');
-        hidden.className = 'cred-label-hidden';
-        hidden.textContent = match[0];
-        frag.appendChild(hidden);
-        frag.appendChild(pill);
-        lastIdx = match.index + match[0].length;
+    const allTags = [];
+    let match;
+    while ((match = labelPattern.exec(text)) !== null) {
+      const cleaned = match[1].replace(/[\u26A0\uFE0F\u2757]/g, '').replace(/[\u4e00-\u9fff]+/g, '');
+      const tagRe = /\b(S[1-3]|M[1-3]|R[1-3]|U|C|F)\b/g;
+      let tm;
+      while ((tm = tagRe.exec(cleaned)) !== null) {
+        if (!allTags.includes(tm[1])) allTags.push(tm[1]);
       }
-      if (lastIdx < text.length) {
-        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
-      }
-      textNode.parentNode.replaceChild(frag, textNode);
     }
+
+    if (allTags.length === 0) return;
+
+    // Append a single summary pill at the end (does not modify text nodes)
+    const pill = document.createElement('span');
+    pill.className = 'cred-label-pill';
+    pill.textContent = allTags.join('·');
+    pill.dataset.tags = JSON.stringify(allTags);
+    el.appendChild(pill);
   }
 
   // --- Process paragraph ---
   function processParagraph(p) {
+    // Skip paragraphs inside actively streaming messages
+    if (isStreaming(p)) return;
+
     const text = p.textContent || '';
     const tags = extractTags(text);
 
@@ -250,9 +238,6 @@
     if (p.dataset.credProcessed) {
       p.classList.remove('cred-red', 'cred-orange', 'cred-gray', 'cred-green', 'cred-fragile');
       p.querySelectorAll('.cred-label-pill').forEach(pill => pill.remove());
-      p.querySelectorAll('.cred-label-hidden').forEach(span => {
-        span.replaceWith(document.createTextNode(span.textContent));
-      });
       // Clean up any orphaned hover cards
       document.querySelectorAll('.cred-hover-card').forEach(c => c.remove());
     }
@@ -301,11 +286,7 @@
   function removeAll() {
     document.querySelectorAll('[data-cred-processed]').forEach((el) => {
       el.classList.remove('cred-red', 'cred-orange', 'cred-gray', 'cred-green', 'cred-risk', 'cred-fragile');
-      // Remove pills, then restore hidden labels back to raw text
       el.querySelectorAll('.cred-label-pill').forEach(pill => pill.remove());
-      el.querySelectorAll('.cred-label-hidden').forEach(span => {
-        span.replaceWith(document.createTextNode(span.textContent));
-      });
       delete el.dataset.credProcessed;
       delete el.dataset.credColor;
       delete el.dataset.credLabels;

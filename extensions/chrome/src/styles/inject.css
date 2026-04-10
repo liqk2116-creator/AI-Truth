@@ -39,8 +39,7 @@
   text-underline-offset: 4px !important;
 }
 
-/* === Hidden label (stores original text for toggle restore) === */
-.cred-label-hidden { display: none !important; }
+/* (hidden-label spans removed — pills are now appended non-destructively) */
 
 /* === Label pill (Audit mode — color matches paragraph) === */
 .cred-label-pill {
