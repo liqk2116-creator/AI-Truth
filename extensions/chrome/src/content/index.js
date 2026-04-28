@@ -181,6 +181,17 @@
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // Safe Element.closest — guards against e.target being Document, Window,
+  // a Text node, or any object whose `closest` is missing or non-callable
+  // (some custom elements / Web Components shadow it). Returns null instead
+  // of throwing "closest is not a function".
+  function safeClosest(target, selector) {
+    if (target && typeof target.closest === 'function') {
+      try { return target.closest(selector); } catch (e) { return null; }
+    }
+    return null;
+  }
+
   // --- Check if element is inside a streaming message ---
   function isStreaming(el) {
     return !!(
@@ -457,7 +468,7 @@
   let activePill = null;
 
   document.addEventListener('mouseenter', (e) => {
-    const pill = e.target?.closest?.('.cred-label-pill');
+    const pill = safeClosest(e.target, '.cred-label-pill');
     if (!pill || mode !== 'audit') return;
     // Cancel pending hide if re-entering same or different pill
     if (hoverHideTimer) { clearTimeout(hoverHideTimer); hoverHideTimer = null; }
@@ -483,7 +494,7 @@
   }, true);
 
   document.addEventListener('mouseleave', (e) => {
-    if (e.target?.closest?.('.cred-label-pill')) {
+    if (safeClosest(e.target, '.cred-label-pill')) {
       // Delay hide to prevent flicker when mouse moves briefly off pill
       hoverHideTimer = setTimeout(() => {
         document.querySelectorAll('.cred-hover-card').forEach(c => c.remove());
@@ -497,7 +508,7 @@
   let fragHideTimer = null;
 
   document.addEventListener('mouseenter', (e) => {
-    const p = e.target?.closest?.('.cred-fragile');
+    const p = safeClosest(e.target, '.cred-fragile');
     if (!p || mode !== 'audit') return;
     if (fragHideTimer) { clearTimeout(fragHideTimer); fragHideTimer = null; }
     if (p.querySelector('.cred-fragile-tip')) return; // already showing
@@ -511,7 +522,7 @@
   }, true);
 
   document.addEventListener('mouseleave', (e) => {
-    if (e.target?.closest?.('.cred-fragile')) {
+    if (safeClosest(e.target, '.cred-fragile')) {
       fragHideTimer = setTimeout(() => {
         document.querySelectorAll('.cred-fragile-tip').forEach(t => t.remove());
         fragHideTimer = null;
