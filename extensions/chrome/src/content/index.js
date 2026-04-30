@@ -312,14 +312,26 @@
     // (streaming may add labels after initial render)
     if (tags.length === 0) return;
 
+    const now = Date.now();
     const textStable = p.dataset.credText === text;
     const alreadyProcessed = !!p.dataset.credProcessed;
+
+    // Track text-change timestamp. The deferred pill/wrap step waits not
+    // only for isStreaming() to be false but also for the paragraph text
+    // to have been quiet for STREAM_QUIET_MS. This defends against ChatGPT
+    // (and others) introducing new streaming-state markers that
+    // isStreaming() doesn't recognize yet — as long as tokens are still
+    // streaming in, the text keeps changing and pill-application stays
+    // deferred, preventing the React-reconciliation truncation bug.
+    if (!textStable) p.dataset.credChangedAt = String(now);
+    const stableMs = now - (parseInt(p.dataset.credChangedAt, 10) || now);
+    const STREAM_QUIET_MS = 1500;
 
     // Text unchanged since last scan — apply deferred DOM mutations (pill, wrap)
     // only when streaming is done, to avoid interfering with React's reconciliation
     // of ChatGPT/Claude/Gemini's incremental renders.
     if (alreadyProcessed && textStable) {
-      if (streaming) return;
+      if (streaming || stableMs < STREAM_QUIET_MS) return;
       if (!p.dataset.credPilled) {
         mutating = true;
         try { replaceLabelsInElement(p); } finally { mutating = false; }
